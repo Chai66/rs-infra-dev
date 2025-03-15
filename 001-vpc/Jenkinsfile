@@ -5,19 +5,19 @@ pipeline {
         }
     }
     options {
-        ansiColor('xterm')
-        // timeout(time: 1, unit: 'HOURS')
-        // disableConcurrentBuilds()
+        //ansiColor('xterm')
+        timeout(time: 1, unit: 'HOURS')
+        disableConcurrentBuilds()
     }
-    parameters {
-        choice(name: 'action', choices: ['apply', 'destroy'], description: 'Pick something')
-    }
+    // parameters {
+    //     choice(name: 'action', choices: ['apply', 'destroy'], description: 'Pick something')
+    // }
     // build
     stages {
         stage('Init') {
             steps {
                 sh """
-                    cd 01-vpc
+                    cd 001-vpc
                     terraform init -reconfigure
                 """
             }
@@ -25,17 +25,17 @@ pipeline {
         stage('Plan') {
             steps {
                 sh """
-                    cd 01-vpc
+                    cd 001-vpc
                     terraform plan
                 """
             }
         }
         stage('Deploy') {
-            when {
-                expression { 
-                    params.action == 'apply'
-                }
-            }
+            // when {
+            //     expression { 
+            //         params.action == 'apply'
+            //     }
+            // }
             input {
                 message "Should we continue?"
                 ok "Yes, we should."
@@ -46,32 +46,32 @@ pipeline {
             }
             steps {
                 sh """
-                    cd 01-vpc
+                    cd 001-vpc
                     terraform apply -auto-approve
                 """
             }
         }
-        stage('Destroy') {
-            when {
-                expression { 
-                    params.action == 'destroy'
-                }
-            }
-            input {
-                message "Should we continue?"
-                ok "Yes, we should."
-                // submitter "alice,bob"
-                // parameters {
-                //     string(name: 'PERSON', defaultValue: 'Mr Jenkins', description: 'Who should I say hello to?')
-                // }
-            }
-            steps {
-                sh """
-                    cd 01-vpc
-                    terraform destroy -auto-approve
-                """
-            }
-        }
+        // stage('Destroy') {
+        //     when {
+        //         expression { 
+        //             params.action == 'destroy'
+        //         }
+        //     }
+        //     input {
+        //         message "Should we continue?"
+        //         ok "Yes, we should."
+        //         // submitter "alice,bob"
+        //         // parameters {
+        //         //     string(name: 'PERSON', defaultValue: 'Mr Jenkins', description: 'Who should I say hello to?')
+        //         // }
+        //     }
+        //     steps {
+        //         sh """
+        //             cd 001-vpc
+        //             terraform destroy -auto-approve
+        //         """
+        //     }
+        // }
     }
     // post build
     post { 
