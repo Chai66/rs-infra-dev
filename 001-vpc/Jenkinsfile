@@ -9,9 +9,9 @@ pipeline {
         // timeout(time: 1, unit: 'HOURS')
         // disableConcurrentBuilds()
     }
-    // parameters {
-    //     choice(name: 'action', choices: ['apply', 'destroy'], description: 'Pick something')
-    // }
+    parameters {
+        choice(name: 'action', choices: ['apply', 'destroy'], description: 'Pick something')
+    }
     // build
     stages {
         stage('Init') { 
@@ -31,11 +31,11 @@ pipeline {
             }
         }
         stage('Deploy') {
-            // when {
-            //     expression { 
-            //         params.action == 'apply'
-            //     }
-            // }
+            when {
+                expression { 
+                    params.action == 'apply'
+                }
+            }
             input {
                 message "Should we continue?"
                 ok "Yes, we should."
