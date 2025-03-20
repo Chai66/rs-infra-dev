@@ -20,7 +20,7 @@ variable "environment" {
  # default = "dev"
 }
 variable "zone_name" {
- # default = "devopspractice123.online"
+ # default = "devopspilot.online"
 }
 
 variable "vpc_id" {
